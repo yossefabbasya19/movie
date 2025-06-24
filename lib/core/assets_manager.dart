@@ -31,6 +31,7 @@ abstract class AssetsManager {
   static String egyptFlag = "$base3/EG.png";
   static String usaFlag = "$base3/LR.png";
   static String watchLater = "$base3/watch_later.png";
+  static String watchLaterSelect = "$base3/watch_later_select.png";
   static String likes = "$base3/likes.png";
   static String rate = "$base3/rate.png";
   static String time = "$base3/time.png";

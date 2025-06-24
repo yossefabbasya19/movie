@@ -43,7 +43,15 @@ class MainLayoutRepoImplements extends MainLayoutRepo {
         "https://route-movie-apis.vercel.app/profile",
         token: token,
       );
+      List<dynamic> getAllFavorites = await ApiService.get(
+        "https://route-movie-apis.vercel.app/favorites/all",
+        token: token,
+      );
+
       UserDm.currentUser = UserDm.fromJson(profileInfo);
+      for(var item in getAllFavorites){
+        UserDm.currentUser!.watchList.add(int.parse(item["movieId"]));
+      }
       return Right(null);
     } on Exception catch (e) {
       if(e is DioException){

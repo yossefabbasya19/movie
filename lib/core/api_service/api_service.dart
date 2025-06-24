@@ -14,7 +14,13 @@ abstract class ApiService {
   }
 
   static Future<dynamic> post(String url, Map<String, dynamic> data) async {
-    Response response = await dio.post(url, data: data);
+    Response response = await dio.post(
+      url,
+      data: data,
+      options: Options(
+        headers: {"authorization": "Bearer ${SharedPref().userToken}"},
+      ),
+    );
     return response.data["data"];
   }
 

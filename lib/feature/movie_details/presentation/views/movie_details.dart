@@ -5,6 +5,7 @@ import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/extention/string_ex.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
+import 'package:movies/core/models/user_Dm.dart';
 import 'package:movies/feature/movie_details/data/model/Data.dart';
 import 'package:movies/feature/movie_details/data/repo/movie_details_repo_imple.dart';
 import 'package:movies/feature/movie_details/presentation/view_model/movie_detail_cubit.dart';
@@ -60,7 +61,12 @@ class _MovieDetailsState extends State<MovieDetails> {
               },
               builder: (context, state) {
                 return SliverToBoxAdapter(
-                  child: DisplayMovieImage(movie: widget.movie),
+                  child: DisplayMovieImage(
+                    movie: widget.movie,
+                    isFavorites: UserDm.currentUser!.watchList.contains(
+                      widget.movie.id,
+                    ),
+                  ),
                 );
               },
             ),

@@ -6,8 +6,8 @@ class UserDm {
   final String userName;
   final String email;
   final String phoneNumber;
-  final List watchList;
-  final List history;
+  final List<int> watchList;
+  final List<int> history;
 
   UserDm(  {
     this.token,
