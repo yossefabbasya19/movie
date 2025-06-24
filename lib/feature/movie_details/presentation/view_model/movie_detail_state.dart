@@ -27,3 +27,10 @@ final class MovieDetailSuggestionFailure extends MovieDetailState {
 
   MovieDetailSuggestionFailure(this.errorMessage);
 }
+final class AddFavoritesSuccess extends MovieDetailState {}
+final class AddFavoritesLoading extends MovieDetailState {}
+final class AddFavoritesFailure extends MovieDetailState {
+  final String errorMessage;
+
+  AddFavoritesFailure(this.errorMessage);
+}

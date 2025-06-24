@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
 import 'package:either_dart/src/either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:movies/core/failure/failure.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
@@ -42,6 +43,31 @@ class MovieDetailCubit extends Cubit<MovieDetailState> {
       (right) {
         movieSuggestion = right.movies;
         emit(MovieDetailSuggestionSuccess(right.movies!));
+      },
+    );
+  }
+
+  Future<void> addFavorites(Movies movie) async {
+    emit(AddFavoritesLoading());
+    var result = await movieDetailsRepo.addFavorites(movie);
+    result.fold(
+      (left) {
+        emit(AddFavoritesFailure(left.errMessage));
+      },
+      (right) {
+        emit(AddFavoritesSuccess());
+      },
+    );
+  }
+  Future<void> removeFavorites(int movieID) async {
+    emit(AddFavoritesLoading());
+    var result = await movieDetailsRepo.removeFavorites(movieID);
+    result.fold(
+          (left) {
+        emit(AddFavoritesFailure(left.errMessage));
+      },
+          (right) {
+        emit(AddFavoritesSuccess());
       },
     );
   }

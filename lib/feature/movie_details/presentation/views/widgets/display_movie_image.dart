@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
 import 'package:movies/core/models/user_Dm.dart';
 import 'package:movies/core/shared_pref/shared_pref.dart';
 import 'package:movies/core/widgets/custom_elevation_button.dart';
+import 'package:movies/feature/movie_details/presentation/view_model/movie_detail_cubit.dart';
 import 'package:movies/feature/movie_details/presentation/views/widgets/info_display.dart';
 
-class DisplayMovieImage extends StatelessWidget {
+class DisplayMovieImage extends StatefulWidget {
   final Movies movie;
+  final bool isFavorites;
 
-  const DisplayMovieImage({super.key, required this.movie});
+  const DisplayMovieImage({
+    super.key,
+    required this.movie,
+    required this.isFavorites,
+  });
+
+  @override
+  State<DisplayMovieImage> createState() => _DisplayMovieImageState();
+}
+
+class _DisplayMovieImageState extends State<DisplayMovieImage> {
+  late bool isFavorites;
+
+  @override
+  void initState() {
+    isFavorites = widget.isFavorites;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +46,7 @@ class DisplayMovieImage extends StatelessWidget {
                   fit: BoxFit.fill,
                   width: width,
                   height: height * 0.6520600858369099,
-                  image: NetworkImage(movie.mediumCoverImage!),
+                  image: NetworkImage(widget.movie.mediumCoverImage!),
                 ),
                 Container(
                   width: width,
@@ -63,12 +83,27 @@ class DisplayMovieImage extends StatelessWidget {
                         icon: Icon(Icons.arrow_back_ios),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          print(SharedPref().userToken);
-                          print("watch_later");
+                        onTap: () async {
+                          if (!isFavorites) {
+                            await BlocProvider.of<MovieDetailCubit>(
+                              context,
+                            ).addFavorites(widget.movie);
+                            isFavorites = !isFavorites;
+                            setState(() {});
+                          } else {
+                            await BlocProvider.of<MovieDetailCubit>(
+                              context,
+                            ).removeFavorites(widget.movie.id!);
+                            isFavorites = !isFavorites;
+                            setState(() {});
+                          }
+                          print(UserDm.currentUser!.watchList);
                         },
                         child: Image(
-                          image: AssetImage(AssetsManager.watchLater),
+                          image:
+                              isFavorites
+                                  ? AssetImage(AssetsManager.watchLaterSelect)
+                                  : AssetImage(AssetsManager.watchLater),
                         ),
                       ),
                     ],
@@ -83,12 +118,12 @@ class DisplayMovieImage extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      movie.title!,
+                      widget.movie.title!,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     SizedBox(height: height * 0.02),
                     Text(
-                      "${movie.year!}",
+                      "${widget.movie.year!}",
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ],
@@ -109,13 +144,22 @@ class DisplayMovieImage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              InfoDisplay(imagePath: AssetsManager.likes, number: movie.runtime!-20),
-              InfoDisplay(imagePath: AssetsManager.time, number: movie.runtime!),
-              InfoDisplay(imagePath: AssetsManager.rate, number: movie.rating!),
+              InfoDisplay(
+                imagePath: AssetsManager.likes,
+                number: widget.movie.runtime! - 20,
+              ),
+              InfoDisplay(
+                imagePath: AssetsManager.time,
+                number: widget.movie.runtime!,
+              ),
+              InfoDisplay(
+                imagePath: AssetsManager.rate,
+                number: widget.movie.rating!,
+              ),
             ],
           ),
         ),
-        SizedBox(height: height*0.02,)
+        SizedBox(height: height * 0.02),
       ],
     );
   }
