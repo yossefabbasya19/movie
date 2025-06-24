@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:movies/config/theme/my_theme.dart';
@@ -34,7 +33,7 @@ class _MoviesAppState extends State<MoviesApp> {
       locale: Locale(provider.currentLanguage),
       onGenerateRoute: MyRoutes.route,
       initialRoute:toOnboarding
-          ? FirebaseAuth.instance.currentUser == null
+          ? SharedPref().userToken == null
           ? MyRoutes.login
           : MyRoutes.mainLayout
           : MyRoutes.onBoarding,

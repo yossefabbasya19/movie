@@ -10,19 +10,8 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   EditProfileCubit(this.editProfileRepo) : super(EditProfileInitial());
   final EditProfileRepo editProfileRepo;
   GlobalKey<FormState> formKey = GlobalKey();
+  int selectAvatar = UserDm.currentUser!.avatar;
 
-  Future<void> resetPassword(String email) async {
-    emit(ResetPasswordLoading());
-    var result = await editProfileRepo.resetPassword(email);
-    result.fold(
-      (left) {
-        emit(ResetPasswordFailure(left.errMessage));
-      },
-      (right) {
-        emit(ResetPasswordSuccess());
-      },
-    );
-  }
 
   Future<void> updateData(UserDm userInfo) async {
     if (formKey.currentState!.validate()) {
@@ -45,9 +34,13 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     result.fold((left) {
       emit(DeleteAccountFailure(left.errMessage));
     }, (right) {
-      print("object");
-      print("_______________________________");
       emit(DeleteAccountSuccess());
     });
+  }
+  String formatPhoneNumber(String phone)   {
+    if(phone.contains("+2")){
+     return phone.substring(2);
+    }
+    return phone;
   }
 }

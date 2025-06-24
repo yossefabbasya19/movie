@@ -24,7 +24,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   GlobalKey<FormState> formKey = GlobalKey();
-  String avatarName = avatars[0];
+  int avatarIndex = 0;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -50,7 +50,7 @@ class _RegisterState extends State<Register> {
             children: [
               CustomCarouselSlider(
                 onPageChanged: (index, _) {
-                  avatarName = avatars[index];
+                  avatarIndex = index;
                 },
               ),
               SizedBox(height: 10),
@@ -100,7 +100,9 @@ class _RegisterState extends State<Register> {
                 listener: (context, state) {
                   if (state is CreateAccountFailure) {
                     showSnackBar(context, state.errMessage);
-                  } else if (state is CreateAccountSuccess) {}
+                  } else if (state is CreateAccountSuccess) {
+                    Navigator.pushReplacementNamed(context, MyRoutes.login);
+                  }
                 },
                 builder: (context, state) {
                   return CustomElevationButton(
@@ -112,7 +114,7 @@ class _RegisterState extends State<Register> {
                         ).createAccount(
                           UserDm(
                             userID: '',
-                            avatar: avatarName,
+                            avatar: avatarIndex,
                             userName: nameController.text,
                             email: emailController.text,
                             phoneNumber: phoneController.text,

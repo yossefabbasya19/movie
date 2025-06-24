@@ -3,6 +3,7 @@ import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/firebase_servise/firebase_service.dart';
 import 'package:movies/core/models/user_Dm.dart';
 import 'package:movies/core/my_routes/my_routes.dart';
+import 'package:movies/core/shared_pref/shared_pref.dart';
 import 'package:movies/core/widgets/custom_elevation_button.dart';
 
 class ProfileButton extends StatelessWidget {
@@ -43,8 +44,8 @@ class ProfileButton extends StatelessWidget {
                 bottom: 4,
               ),
               onPressed: () async{
-                await FirebaseService.signOut();
                 UserDm.currentUser=null;
+                await SharedPref().removeToken();
                 Navigator.pushReplacementNamed(context,MyRoutes.login);
               },
               txt: "Exit",

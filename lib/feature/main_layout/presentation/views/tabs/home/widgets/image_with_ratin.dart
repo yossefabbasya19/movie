@@ -26,7 +26,7 @@ class image_with_rating extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: CachedNetworkImage(
-              imageUrl: movies.largeCoverImage!,
+              imageUrl: movies.mediumCoverImage!,
               errorWidget:
                   (context, url, error) =>
                       Image(image: AssetImage(AssetsManager.noImage)),

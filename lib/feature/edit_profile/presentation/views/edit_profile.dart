@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/constace.dart';
-import 'package:movies/core/firebase_servise/firebase_service.dart';
 import 'package:movies/core/helper/show_snack_bar.dart';
 import 'package:movies/core/models/user_Dm.dart';
 import 'package:movies/core/my_routes/my_routes.dart';
@@ -12,6 +11,7 @@ import 'package:movies/core/validation_rules/validation_rules.dart';
 import 'package:movies/core/widgets/custom_elevation_button.dart';
 import 'package:movies/core/widgets/custom_text_form_failed.dart';
 import 'package:movies/feature/edit_profile/presentation/view_model/edit_profile_cubit.dart';
+import 'package:movies/feature/edit_profile/presentation/views/widgets/custom_grid_view.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -23,13 +23,18 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  int? selectAvatar;
+
   bool updateLoading = false;
   bool deleteLoading = false;
 
   @override
   void initState() {
     userNameController.text = UserDm.currentUser!.userName;
-    phoneNumberController.text = UserDm.currentUser!.phoneNumber;
+    phoneNumberController.text = BlocProvider.of<EditProfileCubit>(
+      context,
+    ).formatPhoneNumber(UserDm.currentUser!.phoneNumber);
+    selectAvatar = BlocProvider.of<EditProfileCubit>(context).selectAvatar;
     super.initState();
   }
 
@@ -43,7 +48,8 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
-    //double width = MediaQuery.sizeOf(context).width;
+    double width = MediaQuery.sizeOf(context).width;
+    EditProfileCubit cubit = BlocProvider.of<EditProfileCubit>(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -57,9 +63,25 @@ class _EditProfileState extends State<EditProfile> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: height * 0.04),
-                Image(
-                  height: height * 0.2,
-                  image: AssetImage(UserDm.currentUser!.avatar),
+                GestureDetector(
+                  onTap: () async {
+                    await showModalBottomSheet(
+                      backgroundColor: ColorsManager.blackWithOp,
+                      context: context,
+                      builder: (context) {
+                        return CustomGridView(
+                          cubit: cubit,
+                          selectAvatar: selectAvatar!,
+                        );
+                      },
+                    );
+                    selectAvatar =
+                        BlocProvider.of<EditProfileCubit>(context).selectAvatar;
+                  },
+                  child: Image(
+                    height: height * 0.2,
+                    image: AssetImage(avatars[UserDm.currentUser!.avatar]),
+                  ),
                 ),
                 CustomTextFormFailed(
                   label: "userName",
@@ -72,30 +94,20 @@ class _EditProfileState extends State<EditProfile> {
                   prefixIconPath: AssetsManager.phone,
                   controller: phoneNumberController,
                 ),
-                BlocConsumer<EditProfileCubit, EditProfileState>(
-                  listener: (context, state) {
-                    if (state is ResetPasswordFailure) {
-                      showSnackBar(context, state.errMessage);
-                    } else if (state is ResetPasswordSuccess) {
-                      showSnackBar(context, "check your email box");
-                    }
-                  },
-                  builder: (context, state) {
-                    return Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () async {
-                          await BlocProvider.of<EditProfileCubit>(
-                            context,
-                          ).resetPassword(UserDm.currentUser!.email);
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.reset_password,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ),
-                    );
-                  },
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        MyRoutes.resetPassword,
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.reset_password,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
                 ),
                 SizedBox(height: height * 0.17),
                 BlocConsumer<EditProfileCubit, EditProfileState>(
@@ -144,7 +156,7 @@ class _EditProfileState extends State<EditProfile> {
                       onPressed: () async {
                         var userInfo = UserDm(
                           userID: UserDm.currentUser!.userID,
-                          avatar: avatars[0],
+                          avatar: selectAvatar!,
                           userName: userNameController.text,
                           email: UserDm.currentUser!.email,
                           phoneNumber: phoneNumberController.text,
