@@ -15,3 +15,15 @@ final class MovieDetailFailure extends MovieDetailState {
 
   MovieDetailFailure(this.errorMessage);
 }
+final class MovieDetailSuggestionInitial extends MovieDetailState {}
+final class MovieDetailSuggestionLoading extends MovieDetailState {}
+final class MovieDetailSuggestionSuccess extends MovieDetailState {
+  final  List<Movies> data;
+
+  MovieDetailSuggestionSuccess(this.data);
+}
+final class MovieDetailSuggestionFailure extends MovieDetailState {
+  final String errorMessage;
+
+  MovieDetailSuggestionFailure(this.errorMessage);
+}

@@ -22,4 +22,13 @@ class SharedPref {
  get getLanguage{
     return sharedPreferences.getString("Language")??"en";
  }
+ Future<void> setUserToken(String token)async{
+   await sharedPreferences.setString("token", token);
+ }
+  Future<void> removeToken()async{
+    await sharedPreferences.remove("token");
+  }
+ String? get userToken{
+    return sharedPreferences.getString("token");
+ }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
+import 'package:movies/core/models/user_Dm.dart';
+import 'package:movies/core/shared_pref/shared_pref.dart';
 import 'package:movies/core/widgets/custom_elevation_button.dart';
 import 'package:movies/feature/movie_details/presentation/views/widgets/info_display.dart';
 
@@ -24,7 +26,7 @@ class DisplayMovieImage extends StatelessWidget {
                   fit: BoxFit.fill,
                   width: width,
                   height: height * 0.6520600858369099,
-                  image: NetworkImage(movie.largeCoverImage!),
+                  image: NetworkImage(movie.mediumCoverImage!),
                 ),
                 Container(
                   width: width,
@@ -62,6 +64,7 @@ class DisplayMovieImage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
+                          print(SharedPref().userToken);
                           print("watch_later");
                         },
                         child: Image(

@@ -1,14 +1,16 @@
 class UserDm {
   static UserDm? currentUser;
   late  String userID;
-  final String avatar;
+   String? token;
+  final int avatar;
   final String userName;
   final String email;
   final String phoneNumber;
   final List watchList;
   final List history;
 
-  UserDm( {
+  UserDm(  {
+    this.token,
     required this.userID,
     required this.avatar,
     required this.userName,
@@ -20,23 +22,23 @@ class UserDm {
 
   factory UserDm.fromJson(json) {
     return UserDm(
-      userID: json["userID"],
-      avatar: json['avatar'],
-      userName: json["userName"],
+      userID: json["_id"],
+      avatar: json['avaterId'],
+      userName: json["name"],
       email: json['email'],
-      phoneNumber: json['phoneNumber'],
-      watchList: json['watchList'],
-      history: json['history'],
+      phoneNumber: json['phone'],
+      watchList: json['watchList']??[],
+      history: json['history']??[],
     );
   }
 
   Map<String, Object> toJson() {
     return {
-      "userID":userID,
-      'avatar':avatar,
-      'userName': userName,
+      "_id":userID,
+      'avaterId':avatar,
+      'name': userName,
       'email': email,
-      'phoneNumber': phoneNumber,
+      'phone': phoneNumber,
       'watchList': watchList,
       'history': history,
     };

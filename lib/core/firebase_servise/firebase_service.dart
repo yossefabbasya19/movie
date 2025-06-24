@@ -65,14 +65,11 @@ abstract class FirebaseService {
 
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithCredential(credential);
-    print(userCredential.user!.uid);
-    print(getUserByDocID(userCredential.user!.uid));
     if (await getUserByDocID(userCredential.user!.uid) == null) {
-      print("________________________");
       await addUserToFireStore(
         UserDm(
           userID: userCredential.user!.uid,
-          avatar: avatars[0],
+          avatar: 0,
           userName: userCredential.user!.displayName ?? '',
           email: userCredential.user!.email ?? '',
           phoneNumber: userCredential.user!.phoneNumber ?? '',

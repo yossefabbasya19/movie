@@ -23,7 +23,7 @@ class InfoDisplay extends StatelessWidget {
           SizedBox(width: width * 0.03),
           Text(
             "$number",
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
           ),
         ],
       ),

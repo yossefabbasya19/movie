@@ -16,7 +16,6 @@ class GetWatchListAndHistoryCubit extends Cubit<GetWatchListState> {
     watchList =[];
     emit(GetWatchListLoading());
     for (var item in moviesIDs) {
-      //print(item);
       var result = mainLayoutRepo.fetchMovieByID(
         "https://yts.mx/api/v2/movie_details.json?movie_id=$item",
       );

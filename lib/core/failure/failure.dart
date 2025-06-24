@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 
- class Failure {
+class Failure {
   final String errMessage;
 
   Failure(this.errMessage);
@@ -18,6 +18,7 @@ class FireBaseFailure extends Failure {
     }
     return FireBaseFailure(fireBaseEx.code);
   }
+
   factory FireBaseFailure.fromLogin(FirebaseException fireBaseEx) {
     if (fireBaseEx.code == 'user-not-found') {
       return FireBaseFailure('No user found for that email.');
@@ -27,8 +28,10 @@ class FireBaseFailure extends Failure {
     return FireBaseFailure(fireBaseEx.code);
   }
 }
-class ServerFailure extends Failure{
+
+class ServerFailure extends Failure {
   ServerFailure(super.errMessage);
+
   factory ServerFailure.fromDioException(DioException dioException) {
     switch (dioException.type) {
       case DioExceptionType.connectionTimeout:
@@ -51,13 +54,18 @@ class ServerFailure extends Failure{
   }
 
   factory ServerFailure.forBadResponse(DioException dioException) {
-
     if (dioException.response!.statusCode == 404) {
-      return ServerFailure("your request not founded");
+      return ServerFailure(
+        dioException.response?.data["message"].toString() ??
+            "your request not founded",
+      );
     } else if (dioException.response!.statusCode == 500) {
       return ServerFailure("internal server error ,plz later again");
+    } else if (dioException.response!.statusCode == 400 ||
+        dioException.response!.statusCode == 401 ||
+        dioException.response!.statusCode == 404) {
+      return ServerFailure(dioException.response!.data["message"].toString());
     }
     return ServerFailure("ops there is error , plz try later1");
   }
-
 }

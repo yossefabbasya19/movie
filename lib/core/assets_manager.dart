@@ -10,6 +10,7 @@ abstract class AssetsManager {
   static String image5 = "$base/Component 15.png";
   static String image6 = "$base/Component 16.png";
   static String playMovie = "$base/play_movie.png";
+  static String resetPassword = "$base/Forgot password-bro 1.png";
   static String noImage = "$base/on_image.png";
   static String searchImage = "$base/search_image.png";
   static String availableNow = "$base/Available Now.png";
