@@ -34,9 +34,7 @@ class SuggestionMovieWidget extends StatelessWidget {
       )
           : SliverToBoxAdapter(
         child: Center(
-          child: CircularProgressIndicator(
-            color: ColorsManager.yellow,
-          ),
+          child: Text("no similar for this movie"),
         ),
       );
   }

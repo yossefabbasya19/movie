@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:movies/core/assets_manager.dart';
+import 'package:movies/config/l10n/app_localizations.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/extention/string_ex.dart';
+import 'package:movies/core/helper/show_snack_bar.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
 import 'package:movies/core/models/user_Dm.dart';
 import 'package:movies/feature/movie_details/data/model/Data.dart';
@@ -38,108 +38,137 @@ class _MovieDetailsState extends State<MovieDetails> {
 
   loadMovieDetails() async {
     await movieDetailCubit.getMovieDetails("${widget.movie.id}");
-    movie = movieDetailCubit.movieData;
-    setState(() {});
+    //movie = movieDetailCubit.movieData;
+    //setState(() {});
     await movieDetailCubit.getMovieSuggestionsDetails("${widget.movie.id}");
-    movieSuggestion = movieDetailCubit.movieSuggestion;
-    setState(() {});
+    //movieSuggestion = movieDetailCubit.movieSuggestion;
+    //setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            BlocConsumer<MovieDetailCubit, MovieDetailState>(
-              listener: (context, state) {
-                if (state is MovieDetailSuccess) {
-                  print("object");
-                }
-              },
-              builder: (context, state) {
-                return SliverToBoxAdapter(
-                  child: DisplayMovieImage(
-                    movie: widget.movie,
-                    isFavorites: UserDm.currentUser!.watchList.contains(
-                      widget.movie.id,
+    return BlocProvider.value(
+      value: movieDetailCubit,
+      child: SafeArea(
+        child: Scaffold(
+          body: BlocConsumer<MovieDetailCubit, MovieDetailState>(
+            listener: (context, state) {
+              if (state is MovieDetailFailure) {
+                showSnackBar(context, state.errorMessage);
+              }
+              if (state is MovieDetailSuccess) {
+                movie = state.data;
+              }
+            },
+            builder: (context, state) {
+              return CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: DisplayMovieImage(
+                      movie: widget.movie,
+                      isFavorites: UserDm.currentUser!.watchList.contains(
+                        widget.movie.id,
+                      ),
                     ),
                   ),
-                );
-              },
-            ),
-            SliverToBoxAdapter(child: ShortCutWidget(movie: movie)),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.similar,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
-            SuggestionMovieWidget(movieSuggestion: movieSuggestion),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.summary,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Text(
-                  movie?.movie?.descriptionFull?.descriptionIsEmpty ??
-                      "not founded",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
+                  SliverToBoxAdapter(child: ShortCutWidget(movie: movie)),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.similar,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.cast,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
-            CastWidget(movie: movie),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.genres,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
-            GenresWidget(movie: movie),
-            SliverToBoxAdapter(child: SizedBox(height: height * 0.03)),
-          ],
+                  BlocConsumer<MovieDetailCubit, MovieDetailState>(
+                    listener: (context, state) {
+                      if (state is MovieDetailSuggestionFailure) {
+                        showSnackBar(context, state.errorMessage);
+                      } else if (state is MovieDetailSuggestionSuccess) {
+                        print(state.data);
+                        movieSuggestion = state.data;
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is MovieDetailSuggestionLoading) {
+                        return SliverToBoxAdapter(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: ColorsManager.yellow,
+                            ),
+                          ),
+                        );
+                      }
+                      return SuggestionMovieWidget(
+                        movieSuggestion: movieSuggestion,
+                      );
+                    },
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.summary,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Text(
+                        movie?.movie?.descriptionFull?.descriptionIsEmpty ??
+                            "not founded",
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.cast,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  CastWidget(movie: movie),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.genres,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ),
+                  GenresWidget(movie: movie),
+                  SliverToBoxAdapter(child: SizedBox(height: height * 0.03)),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

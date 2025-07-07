@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/config/l10n/app_localizations.dart';
 import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
-import 'package:movies/core/constace.dart';
 import 'package:movies/core/helper/show_snack_bar.dart';
 import 'package:movies/core/models/user_Dm.dart';
 import 'package:movies/core/my_routes/my_routes.dart';
@@ -10,7 +10,6 @@ import 'package:movies/core/validation_rules/validation_rules.dart';
 import 'package:movies/core/widgets/custom_carousel_slider.dart';
 import 'package:movies/core/widgets/custom_elevation_button.dart';
 import 'package:movies/core/widgets/custom_text_form_failed.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies/core/widgets/custom_toggle_switch.dart';
 import 'package:movies/core/widgets/custom_widget_display_two_text.dart';
 import 'package:movies/feature/authentication/presentation/views_model/create_account_cubit/create_account_cubit.dart';

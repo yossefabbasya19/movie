@@ -18,7 +18,10 @@ abstract class ApiService {
       url,
       data: data,
       options: Options(
-        headers: {"authorization": "Bearer ${SharedPref().userToken}"},
+        headers: {
+          "authorization": "Bearer ${SharedPref().userToken}",
+          "Content-Type": "application/json",
+        },
       ),
     );
     return response.data["data"];

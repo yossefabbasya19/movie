@@ -45,10 +45,7 @@ abstract class MyRoutes {
       case movieDetails:
         return MaterialPageRoute(
           builder:
-              (context) => BlocProvider(
-                create: (context) => MovieDetailCubit(MovieDetailsRepoImple()),
-                child: MovieDetails(movie: setting.arguments as Movies),
-              ),
+              (context) => MovieDetails(movie: setting.arguments as Movies),
         );
       case register:
         return MaterialPageRoute(
