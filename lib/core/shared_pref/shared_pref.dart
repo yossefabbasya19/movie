@@ -1,3 +1,4 @@
+import 'package:movies/core/models/user_Dm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -30,5 +31,17 @@ class SharedPref {
   }
  String? get userToken{
     return sharedPreferences.getString("token");
+
  }
+  Future<void> setUserHistory(String movieID) async {
+    List<String> movieIDs = userHistory!;
+    if (movieIDs.contains(movieID)) return;
+    movieIDs.add(movieID);
+    UserDm.currentUser!.history.add(int.parse(movieID));
+    await sharedPreferences.setStringList("history", movieIDs);
+  }
+
+  List<String>? get userHistory {
+    return sharedPreferences.getStringList("history") ?? [];
+  }
 }

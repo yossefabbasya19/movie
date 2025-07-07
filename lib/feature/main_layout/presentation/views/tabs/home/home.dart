@@ -42,10 +42,9 @@ class _HomeState extends State<Home> {
     await fetchHomeDataCubit.fetchHomeData(
       "https://yts.mx/api/v2/list_movies.json?sort_by=year&minimum_rating=7",
     );
-    movies = fetchHomeDataCubit.movies;
+    //movies = fetchHomeDataCubit.movies;
     await fetchHomeDataWithCategoryCubit.fetchHomeDataWithCategory();
-    moviesWithCategory = fetchHomeDataWithCategoryCubit.moviesWithCategory;
-    setState(() {});
+    //moviesWithCategory = fetchHomeDataWithCategoryCubit.moviesWithCategory;
   }
 
   @override
@@ -70,7 +69,8 @@ class _HomeState extends State<Home> {
                       }
                     },
                     builder: (context, state) {
-                      if (state is FetchHomeDataSuccess && movies.isNotEmpty) {
+                      if (state is FetchHomeDataSuccess) {
+                        movies = state.movies;
                         return SizedBox(
                           height: height * 0.65,
                           child: Stack(
@@ -107,19 +107,32 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            moviesWithCategory.isEmpty
-                ? SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: ColorsManager.yellow,
+            BlocConsumer<
+              FetchHomeDataWithCategoryCubit,
+              FetchHomeDataWithCategoryState
+            >(
+              listener: (context, state) {
+                if(state is FetchHomeDataWithCategoryFailure){
+                  showSnackBar(context, state.errMessage);
+                }else if(state is FetchHomeDataWithCategorySuccess){
+                  moviesWithCategory = state.moviesWithCategory;
+                }
+              },
+              builder: (context, state) {
+                if(state is FetchHomeDataWithCategoryLoading){
+                  return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: ColorsManager.yellow,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                )
-                : SliverList.builder(
-                  itemCount: genres.length,
+                    );
+                }
+                return SliverList.builder(
+                  itemCount: moviesWithCategory.keys.length,
                   itemBuilder: (context, index) {
                     List<Movies> moviesWithCategoryList =
                         moviesWithCategory[genres[index]]?.movies ?? [];
@@ -152,7 +165,21 @@ class _HomeState extends State<Home> {
                       ],
                     );
                   },
-                ),
+                );
+              },
+
+            ),
+
+            // ? SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Center(
+            //       child: CircularProgressIndicator(
+            //         color: ColorsManager.yellow,
+            //       ),
+            //     ),
+            //   ),
+            // )
             SliverToBoxAdapter(child: SizedBox(height: height * 0.1)),
           ],
         ),

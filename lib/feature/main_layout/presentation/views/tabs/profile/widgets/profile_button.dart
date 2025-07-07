@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/config/l10n/app_localizations.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/firebase_servise/firebase_service.dart';
 import 'package:movies/core/models/user_Dm.dart';
@@ -30,7 +31,7 @@ class ProfileButton extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, MyRoutes.editProfile);
               },
-              txt: "Edit Profile",
+              txt: AppLocalizations.of(context)!.edit_profile,
             ),
           ),
           Expanded(
@@ -48,7 +49,7 @@ class ProfileButton extends StatelessWidget {
                 await SharedPref().removeToken();
                 Navigator.pushReplacementNamed(context,MyRoutes.login);
               },
-              txt: "Exit",
+              txt: AppLocalizations.of(context)!.exit,
             ),
           ),
         ],

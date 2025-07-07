@@ -4,6 +4,7 @@ import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
 import 'package:movies/core/my_routes/my_routes.dart';
+import 'package:movies/core/shared_pref/shared_pref.dart';
 
 class image_with_rating extends StatelessWidget {
   const image_with_rating({
@@ -18,7 +19,8 @@ class image_with_rating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async{
+        await SharedPref().setUserHistory(movies.id.toString());
         Navigator.pushNamed(context, MyRoutes.movieDetails, arguments: movies);
       },
       child: Stack(

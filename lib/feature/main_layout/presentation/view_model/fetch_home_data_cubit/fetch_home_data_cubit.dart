@@ -21,7 +21,7 @@ class FetchHomeDataCubit extends Cubit<FetchHomeDataState> {
       },
           (right) {
         movies = right.movies!;
-        emit(FetchHomeDataSuccess());
+        emit(FetchHomeDataSuccess(right.movies!));
       },
     );
   }

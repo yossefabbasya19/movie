@@ -8,6 +8,7 @@ import 'package:movies/core/shared_pref/shared_pref.dart';
 import 'package:movies/core/widgets/custom_elevation_button.dart';
 import 'package:movies/feature/movie_details/presentation/view_model/movie_detail_cubit.dart';
 import 'package:movies/feature/movie_details/presentation/views/widgets/info_display.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DisplayMovieImage extends StatefulWidget {
   final Movies movie;
@@ -111,7 +112,8 @@ class _DisplayMovieImageState extends State<DisplayMovieImage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print("play movie");
+                    if(widget.movie.url ==null)return;
+                    launchUrl(Uri.parse(widget.movie.url!));
                   },
                   child: Image(image: AssetImage(AssetsManager.playMovie)),
                 ),

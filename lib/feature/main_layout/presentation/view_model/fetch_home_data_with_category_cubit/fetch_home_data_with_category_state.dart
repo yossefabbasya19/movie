@@ -11,6 +11,9 @@ final class FetchHomeDataWithCategoryFailure extends FetchHomeDataWithCategorySt
 }
 
 final class FetchHomeDataWithCategorySuccess extends FetchHomeDataWithCategoryState {
+  Map<String, MoviesResponseDm> moviesWithCategory;
+
+  FetchHomeDataWithCategorySuccess({required this.moviesWithCategory});
 }
 
 final class FetchHomeDataWithCategoryLoading extends FetchHomeDataWithCategoryState {}

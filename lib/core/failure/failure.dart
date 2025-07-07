@@ -47,9 +47,10 @@ class ServerFailure extends Failure {
       case DioExceptionType.cancel:
         return ServerFailure("your Requests is cancel, plz try later");
       case DioExceptionType.connectionError:
-        return ServerFailure("your Requests is cancel, plz try later");
+        print(dioException.message);
+        return ServerFailure("connection Error, plz try later");
       case DioExceptionType.unknown:
-        return ServerFailure("your Requests is cancel, plz try later");
+        return ServerFailure("your Requests is cancel2, plz try later");
     }
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:movies/config/l10n/app_localizations.dart';
 import 'package:movies/core/assets_manager.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/constace.dart';

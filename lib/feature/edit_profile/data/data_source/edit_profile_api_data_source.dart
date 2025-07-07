@@ -31,6 +31,7 @@ class EditProfileApiDataSource extends DataSource {
       await ApiService.patch("https://route-movie-apis.vercel.app/profile", {
         "name" : userInfo.userName,
         "phone" : "+2${userInfo.phoneNumber}",
+        "avaterId": userInfo.avatar
       });
       UserDm.currentUser = userInfo;
       return Right(null);

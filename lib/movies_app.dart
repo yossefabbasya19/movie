@@ -4,7 +4,7 @@ import 'package:movies/config/theme/my_theme.dart';
 import 'package:movies/core/my_routes/my_routes.dart';
 import 'package:movies/core/provider/language_provider.dart';
 import 'package:movies/core/shared_pref/shared_pref.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:movies/config/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class MoviesApp extends StatefulWidget {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/core/colors_manager.dart';
 import 'package:movies/core/models/movie_DM/Movies.dart';
 import 'package:movies/core/models/user_Dm.dart';
+import 'package:movies/core/shared_pref/shared_pref.dart';
 import 'package:movies/feature/main_layout/data/repo/main_layout_repo_implements.dart';
 import 'package:movies/feature/main_layout/presentation/views/tabs/home/widgets/image_with_ratin.dart';
 import 'package:movies/feature/main_layout/presentation/views/tabs/profile/cubit/get_watch_list_cubit/get_watch_list_cubit.dart';
@@ -34,13 +35,13 @@ class _ProfileState extends State<Profile> {
     await getWatchListCubit.getWatchList(
       UserDm.currentUser!.watchList,
     );
-    watchListMovies = getWatchListCubit.watchList;
-    setState(() {});
+    //watchListMovies = getWatchListCubit.watchList;
+    //setState(() {});
     await getWatchListCubit.getHistoryList(
-      UserDm.currentUser!.history,
+      SharedPref().userHistory!,
     );
-    historyListMovies = getWatchListCubit.watchList;
-    setState(() {});
+    //historyListMovies = getWatchListCubit.watchList;
+    //setState(() {});
   }
 
   @override

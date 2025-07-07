@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:movies/config/l10n/app_localizations.dart';
 import 'package:movies/core/constace.dart';
 import 'package:movies/core/models/user_Dm.dart';
+import 'package:movies/core/shared_pref/shared_pref.dart';
 
 class UserDisplayInfo extends StatelessWidget {
   const UserDisplayInfo({super.key});
@@ -51,7 +53,7 @@ class UserDisplayInfo extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Watch List",
+                    AppLocalizations.of(context)!.watch,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -67,14 +69,14 @@ class UserDisplayInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${UserDm.currentUser!.history.length}",
+                  "${SharedPref().userHistory!.length}",
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
                 ),
                 FittedBox(
                   child: Text(
-                    "History",
+                    AppLocalizations.of(context)!.history,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontWeight: FontWeight.w700,
                     ),

@@ -4,8 +4,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:movies/core/get_it/get_it.dart';
 import 'package:movies/core/provider/language_provider.dart';
 import 'package:movies/core/shared_pref/shared_pref.dart';
-import 'package:movies/feature/movie_details/data/repo/movie_details_repo_imple.dart';
-import 'package:movies/feature/movie_details/presentation/views/movie_details.dart';
 import 'package:movies/firebase_options.dart';
 import 'package:movies/movies_app.dart';
 import 'package:provider/provider.dart';

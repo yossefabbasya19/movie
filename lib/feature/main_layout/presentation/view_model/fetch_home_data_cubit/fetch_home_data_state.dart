@@ -11,7 +11,11 @@ final class FetchHomeDataFailure extends FetchHomeDataState {
   FetchHomeDataFailure(this.errMessage);
 }
 
-final class FetchHomeDataSuccess extends FetchHomeDataState {}
+final class FetchHomeDataSuccess extends FetchHomeDataState {
+  final List<Movies> movies;
+
+  FetchHomeDataSuccess(this.movies);
+}
 
 final class FetchHomeDataLoading extends FetchHomeDataState {}
 
